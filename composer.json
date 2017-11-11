@@ -1,0 +1,15 @@
+{
+  "name": "jdoe/testproject",
+  "authors": [
+    {
+      "name": "Jhon DOE",
+      "email": "jdoe@gmail.com"
+    }
+  ],
+  "require": {
+    "php-database-migration/php-database-migration" :"3.6.*"
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}

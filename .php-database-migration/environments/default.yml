@@ -1,0 +1,11 @@
+connection:
+    host:     catalog.dev
+    driver:   mysql
+    port:     3306
+    username: cacatel
+    password: cacatel
+    database: catalog_dev
+    charset:  ~
+
+changelog: changelog
+default_editor: vim
