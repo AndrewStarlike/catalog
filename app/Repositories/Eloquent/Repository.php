@@ -8,10 +8,10 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\Interfaces\RepositoryInterface;
 use App\Repositories\Exceptions\RepositoryException;
-use Illuminate\Database\Eloquent\Model;
+use App\Repositories\Interfaces\RepositoryInterface;
 use Illuminate\Container\Container as App;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Repository
@@ -40,59 +40,71 @@ abstract class Repository implements RepositoryInterface {
     /**
      * Specify Model class name
      *
-     * We force the user to add a body to this method in the concrete child class
-     *
-     * @return mixed
+     * @return string
      */
     abstract function model();
 
     /**
-     * @param array $columns
-     * @return mixed
+     * Method all
+     *
+     * @param  array  $columns
+     * @return \Illuminate\Support\Collection
      */
     public function all($columns = array('*')) {
         return $this->model->get($columns);
     }
 
     /**
-     * @param int $perPage
-     * @param array $columns
-     * @return mixed
+     * Method paginate
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = 15, $columns = array('*')) {
-        return $this->model->paginate($perPage, $columns);
+    public function paginate($perPage = 15, $columns = array('*'), $pageName, $page) {
+        return $this->model->paginate($perPage, $columns, $pageName, $page);
     }
 
     /**
+     * Method create
+     *
      * @param array $data
-     * @return mixed
+     * @return int
      */
     public function create(array $data) {
         return $this->model->create($data);
     }
 
     /**
+     * Method update
+     *
      * @param array $data
-     * @param $id
+     * @param mixed $id
      * @param string $attribute
-     * @return mixed
+     * @return int
      */
     public function update(array $data, $id, $attribute="id") {
         return $this->model->where($attribute, '=', $id)->update($data);
     }
 
     /**
-     * @param $id
-     * @return mixed
+     * Method delete
+     *
+     * @param  array|int $ids
+     * @return int
      */
-    public function delete($id) {
-        return $this->model->destroy($id);
+    public function delete($ids) {
+        return $this->model->destroy($ids);
     }
 
     /**
-     * @param $id
-     * @param array $columns
-     * @return mixed
+     * Method find
+     *
+     * @param  int    $id
+     * @param  array  $columns
+     * @return mixed|static
      */
     public function find($id, $columns = array('*')) {
         return $this->model->find($id, $columns);
@@ -109,6 +121,8 @@ abstract class Repository implements RepositoryInterface {
     }
 
     /**
+     * Method makeModel
+     * 
      * @return Model
      * @throws RepositoryException
      */

@@ -12,55 +12,72 @@ namespace App\Repositories\Interfaces;
 interface RepositoryInterface
 {
     /**
-     * @param $columns
-     * @return mixed
+     * Method all
+     *
+     * @param  array $columns
+     * @return \Illuminate\Support\Collection
      */
     public function all($columns);
 
     /**
-     * @param $perPage
-     * @param $columns
-     * @return mixed
+     * Method paginate
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage, $columns);
+    public function paginate($perPage, $columns, $pageName, $page);
 
     /**
+     * Method create
+     *
      * @param array $data
-     * @return mixed
+     * @return int
      */
     public function create(array $data);
 
     /**
+     * Method update
+     *
      * @param array $data
-     * @param $id
-     * @param $attribute
-     * @return mixed
+     * @param mixed $id
+     * @param string $attribute
+     * @return int
      */
     public function update(array $data, $id, $attribute);
 
     /**
-     * @param $id
-     * @return mixed
+     * Method delete
+     *
+     * @param  array|int $ids
+     * @return int
      */
-    public function delete($id);
+    public function delete($ids);
 
     /**
-     * @param $id
-     * @param $columns
-     * @return mixed
+     * Method find
+     *
+     * @param  int    $id
+     * @param  array  $columns
+     * @return mixed|static
      */
     public function find($id, $columns);
 
     /**
      * @param $attribute
      * @param $value
-     * @param $columns
+     * @param array $columns
      * @return mixed
      */
     public function findBy($attribute, $value, $columns);
 
     /**
-     * @return mixed
+     * Method makeModel
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function makeModel();
 }
