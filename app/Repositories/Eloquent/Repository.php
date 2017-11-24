@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andrewstrlike
+ * User: AndrewStarlike
  * Date: 14.11.2017
  * Time: 22:32
  */
@@ -14,10 +14,12 @@ use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Repository
+ * Class Repository copies some methods from the extending model
+ *
+ * @package App\Repositories\Eloquent
  */
-abstract class Repository implements RepositoryInterface {
-
+abstract class Repository implements RepositoryInterface
+{
     /**
      * @var App
      */
@@ -29,104 +31,116 @@ abstract class Repository implements RepositoryInterface {
     protected $model;
 
     /**
+     * Repository constructor creates a model from the class that inherits this
+     *
      * @param App $app
-     * @throws RepositoryException
      */
-    public function __construct(App $app) {
+    public function __construct(App $app)
+    {
         $this->app = $app;
         $this->makeModel();
     }
 
     /**
-     * Specify Model class name
+     * The path and name of the representative model
      *
      * @return string
      */
     abstract function model();
 
     /**
-     * Method all
+     * Method all lists all founded rows
      *
-     * @param  array  $columns
+     * @param array $columns
      * @return \Illuminate\Support\Collection
      */
-    public function all($columns = array('*')) {
+    public function all($columns = array('*'))
+    {
         return $this->model->get($columns);
     }
 
     /**
-     * Method paginate
+     * Method paginate is the number of items you would like displayed "per page"
      *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null  $page
+     * @param int $perPage
+     * @param array  $columns
+     * @param string $pageName
+     * @param int|null $page
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = 15, $columns = array('*'), $pageName, $page) {
+    public function paginate($perPage = 15, $columns = array('*'), $pageName, $page)
+    {
         return $this->model->paginate($perPage, $columns, $pageName, $page);
     }
 
     /**
-     * Method create
+     * Method create creates a new item
      *
      * @param array $data
      * @return int
      */
-    public function create(array $data) {
+    public function create(array $data)
+    {
         return $this->model->create($data);
     }
 
     /**
-     * Method update
+     * Method update modifies an item by id
      *
      * @param array $data
      * @param mixed $id
      * @param string $attribute
      * @return int
      */
-    public function update(array $data, $id, $attribute="id") {
+    public function update(array $data, $id, $attribute="id")
+    {
         return $this->model->where($attribute, '=', $id)->update($data);
     }
 
     /**
-     * Method delete
+     * Method delete removes an item/a list of items by id/ids
      *
-     * @param  array|int $ids
+     * @param array|int $ids
      * @return int
      */
-    public function delete($ids) {
-        return $this->model->destroy($ids);
+    public function delete($ids)
+    {
+        return $this->model::destroy($ids);
     }
 
     /**
-     * Method find
+     * Method find retrieves an item by id
      *
-     * @param  int    $id
-     * @param  array  $columns
-     * @return mixed|static
+     * @param int $id
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find($id, $columns = array('*')) {
+    public function find($id, $columns = array('*'))
+    {
         return $this->model->find($id, $columns);
     }
 
     /**
-     * @param $attribute
-     * @param $value
+     * Method findBy finds an item by a given key
+     *
+     * @param string $attribute
+     * @param mixed $value
      * @param array $columns
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function findBy($attribute, $value, $columns = array('*')) {
+    public function findBy($attribute, $value, $columns = array('*'))
+    {
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
 
     /**
-     * Method makeModel
+     * Method makeModel creates a model instance
      * 
      * @return Model
      * @throws RepositoryException
      */
-    public function makeModel() {
+    public function makeModel()
+    {
         $model = $this->app->make($this->model());
 
         if (!$model instanceof Model)

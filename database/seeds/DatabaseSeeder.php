@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class DatabaseSeeder seeds the data (fixtures)
+ */
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -12,5 +15,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(DisciplinesTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
     }
 }
